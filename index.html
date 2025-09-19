@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cazador de Productos Digitales Irresistibles 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 90%;
+            max-width: 900px;
+            min-height: 600px;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .login-section {
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .chat-section {
+            display: none;
+            height: 500px;
+            flex-direction: column;
+        }
+        
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        
+        .message {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .message.user {
+            background: #007bff;
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+        
+        .message.bot {
+            background: white;
+            border: 1px solid #e9ecef;
+            margin-right: auto;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .input-section {
+            padding: 20px;
+            border-top: 1px solid #e9ecef;
+            background: white;
+        }
+        
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        input[type="email"], input[type="text"] {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="email"]:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+        
+        button {
+            padding: 15px 25px;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,123,255,0.3);
+        }
+        
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        .final-message {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        
+        .error {
+            background: #dc3545;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px;
+            text-align: center;
+        }
+        
+        .user-info {
+            background: #e7f3ff;
+            padding: 10px 20px;
+            border-bottom: 1px solid #b8daff;
+            font-size: 14px;
+            color: #004085;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .welcome-message {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Cazador de Productos Digitales Irresistibles 2</h1>
+            <p>Identifica propuestas ganadoras usando neuroventas y comportamiento humano</p>
+        </div>
+        
+        <div class="user-info" id="userInfo" style="display: none;">
+            <span>🎁 Regalo de Juan Pablo - Cazador de Productos Digitales</span>
+            <a href="#" onclick="logout()" style="color: #004085; text-decoration: none;">🔄 Reiniciar Chat</a>
+        </div>
+        
+        <div class="login-section" id="loginSection">
+            <h2 style="margin-bottom: 20px; color: #333;">🎁 Regalo de Juan Pablo</h2>
+            <p style="margin-bottom: 30px; color: #666;">Tu Cazador de Productos Digitales está listo para ayudarte</p>
+            <div style="display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto;">
+                <button onclick="startChat()" style="font-size: 18px; padding: 20px;">🚀 Comenzar Ahora - ¡GRATIS!</button>
+            </div>
+            <p style="margin-top: 20px; font-size: 14px; color: #888;">
+                ⭐ Acceso completamente gratuito - No se requiere registro
+            </p>
+        </div>
+        
+        <div class="chat-section" id="chatSection">
+            <div class="messages" id="messages"></div>
+            <div class="input-section">
+                <div class="input-container">
+                    <input type="text" id="messageInput" placeholder="Cuéntame tu idea de producto digital..." onkeypress="handleKeyPress(event)">
+                    <button onclick="sendMessage()" id="sendButton">Enviar</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>El Cazador está analizando...</p>
+        </div>
+    </div>
+
+    <script>
+        let userEmail = '';
+        let messageCount = 0;
+        let lastUsage = null;
+        
+        // ⚠️ CONFIGURACIÓN: Reemplaza con tu URL real de Google Apps Script
+        const API_BASE_URL = 'TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI';
+        
+        // Función simplificada para comenzar chat sin email
+        function startChat() {
+            userEmail = 'usuario-regalo'; // ID genérico para regalo
+            showChatInterface();
+            addWelcomeMessage();
+        }
+        
+        async function verifyAccess() {
+            // Función mantenida por compatibilidad, pero no se usa
+            startChat();
+        }
+        
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Mostrar mensaje del usuario
+            addUserMessage(message);
+            input.value = '';
+            messageCount++;
+            
+            // Deshabilitar botón mientras se procesa
+            document.getElementById('sendButton').disabled = true;
+            showLoading(true);
+            
+            try {
+                const response = await fetch(API_BASE_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'send-message',
+                        email: userEmail,
+                        message: message,
+                        messageCount: messageCount
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    addBotMessage(data.response);
+                    
+                    // Verificar si hay mensaje final
+                    if (data.finalMessage) {
+                        setTimeout(() => {
+                            addFinalMessage(data.finalMessage);
+                        }, 2000);
+                    }
+                } else {
+                    addBotMessage('Lo siento, hubo un error procesando tu mensaje. Intenta nuevamente.');
+                }
+            } catch (error) {
+                // Respuesta demo mientras configuramos la API
+                setTimeout(() => {
+                    const demoResponse = generateDemoResponse(message);
+                    addBotMessage(demoResponse);
+                    
+                    if (messageCount >= 3) {
+                        setTimeout(() => {
+                            addFinalMessage(getDemoFinalMessage());
+                        }, 2000);
+                    }
+                }, 1500);
+            } finally {
+                document.getElementById('sendButton').disabled = false;
+                showLoading(false);
+            }
+        }
+        
+        function generateDemoResponse(userMessage) {
+            const responses = [
+                `🎯 ¡Excelente pregunta! Como Cazador de Productos Digitales, veo gran potencial en tu idea.
+
+Para hacer tu producto IRRESISTIBLE, necesitamos aplicar estas técnicas de neuroventas:
+
+💡 **ANÁLISIS RÁPIDO:**
+• **Problema específico:** ¿Qué dolor exacto resuelve tu producto?
+• **Urgencia temporal:** ¿Por qué lo necesitan HOY, no mañana?
+• **Transformación clara:** ¿Cómo será su vida DESPUÉS de usar tu producto?
+
+🧠 **FÓRMULA NEUROVEMENTAL:**
+"La única [categoría] que [beneficio específico] en [tiempo concreto] sin [objeción principal]"
+
+🚀 **PROPUESTA IRRESISTIBLE:**
+No vendas características, vende la VIDA que van a tener. 
+
+¿Me puedes dar más detalles sobre tu audiencia objetivo?`,
+
+                `🔥 ¡Perfecto! Tu idea tiene elementos ganadores. Te doy mi análisis de cazador:
+
+**LO QUE FUNCIONA:**
+✅ Resuelve un problema real
+✅ Mercado dispuesto a pagar
+✅ Escalable digitalmente
+
+**LO QUE DEBEMOS POTENCIAR:**
+🎯 **Posicionamiento único:** Ser el ÚNICO que ofrece X resultado
+🎯 **Urgencia genuina:** Crear escasez real (tiempo/cantidad)
+🎯 **Prueba irrefutable:** Casos de éxito específicos
+
+**MI RECOMENDACIÓN CAZADORA:**
+Transforma tu idea en una "Transformación de [X] días" con nombre pegajoso.
+
+Ejemplo: "Bootcamp Ingresos Digitales 21 Días"
+
+¿Qué transformación específica prometerías en un tiempo determinado?`,
+
+                `💰 ¡Esta idea puede generar ventas desde el día 1!
+
+**FÓRMULA CAZADOR APLICADA:**
+
+🎯 **HOOK MAGNÉTICO:** 
+"El método [adjetivo impactante] que [resultado específico] en [tiempo] (incluso si [objeción común])"
+
+🧠 **PRINCIPIOS NEUROVENTAS:**
+• **Escasez:** Solo para las primeras 100 personas
+• **Urgencia:** Precio especial termina en 48h
+• **Autoridad:** "El mismo método que uso con mis clientes VIP"
+• **Prueba social:** "Más de [X] personas ya transformaron su [área]"
+
+🚀 **ESTRUCTURA DE LANZAMIENTO:**
+1. **Pre-lanzamiento** (genera expectativa)
+2. **Apertura** (máxima urgencia)
+3. **Cierre** (última oportunidad)
+
+¿Quieres que diseñemos el copywriting exacto para tu lanzamiento?`
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+        
+        function getDemoFinalMessage() {
+            const messages = [
+                '🔥 ¡Sígueme en YouTube para más estrategias de productos irresistibles!',
+                '📱 ¡Nuevo contenido en Instagram! Tips diarios de neuroventas',
+                '🎯 ¡Video exclusivo en YouTube: "3 Fórmulas Para Productos Que Se Venden Solos"',
+                '💰 ¡Sígueme en Instagram para casos de éxito reales!'
+            ];
+            
+            return messages[Math.floor(Math.random() * messages.length)];
+        }
+        
+        function addWelcomeMessage() {
+            const welcomeMsg = `
+                <div class="welcome-message">
+                    🎯 ¡Bienvenido al Cazador de Productos Digitales Irresistibles!
+                    <br><br>
+                    Soy tu experto en identificar propuestas ganadoras que generan ventas desde el primer día.
+                    <br><br>
+                    💡 <strong>¿Qué puedo hacer por ti?</strong><br>
+                    • Analizar tus ideas de productos digitales<br>
+                    • Identificar oportunidades irresistibles<br>
+                    • Aplicar principios de neuroventas<br>
+                    • Sugerir estrategias de lanzamiento
+                </div>
+            `;
+            document.getElementById('messages').innerHTML = welcomeMsg;
+            addBotMessage('¡Perfecto! Cuéntame: ¿Qué idea de producto digital tienes en mente? ¿O necesitas ayuda para encontrar una oportunidad ganadora?');
+        }
+        
+        function addUserMessage(message) {
+            const messagesContainer = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.textContent = message;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function addBotMessage(message) {
+            const messagesContainer = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.innerHTML = message.replace(/\n/g, '<br>');
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function addFinalMessage(message) {
+            const messagesContainer = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'final-message';
+            messageDiv.textContent = message;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        function showChatInterface() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('chatSection').style.display = 'flex';
+            document.getElementById('userInfo').style.display = 'flex';
+            document.getElementById('messageInput').focus();
+        }
+        
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+        
+        function showError(message) {
+            const existingError = document.querySelector('.error');
+            if (existingError) {
+                existingError.remove();
+            }
+            
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            document.querySelector('.container').appendChild(errorDiv);
+            
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        }
+        
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        function logout() {
+            userEmail = '';
+            messageCount = 0;
+            lastUsage = null;
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('chatSection').style.display = 'none';
+            document.getElementById('userInfo').style.display = 'none';
+            document.getElementById('messages').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
